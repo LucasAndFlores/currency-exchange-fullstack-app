@@ -2,9 +2,11 @@ import { z } from 'zod'
 
 export const transactionSchema = z.object({
 	body: z.object({
-		fromCurrency: z.string({
-			required_error: 'fromCurrency is required and should be uppercase'
-		}),
+		fromCurrency: z
+			.string({
+				required_error: 'fromCurrency is required and should be uppercase'
+			})
+			.max(3),
 		amountToConvert: z
 			.number({
 				required_error:
@@ -16,6 +18,6 @@ export const transactionSchema = z.object({
 				required_error:
 					'destinationCurrency is required and should be uppercase'
 			})
-			.toUpperCase()
+			.max(3)
 	})
 })
