@@ -1,8 +1,8 @@
 import { EEStatusCode } from '../enum/EEStatusCode'
 import { ErrorHandler } from '../error/ErrorHandler'
 import { ICreateTransactionService } from '../interface/ICreateTransactionService'
+import { ICreateTransactionServiceResponse } from '../interface/ICreateTransactionServiceResponse'
 import { IGetLatestCurrencyQuotationSuccessResponse } from '../interface/IGetLatestCurrencyQuotationSuccessResponse'
-import { IServiceResponse } from '../interface/IServiceResponse'
 import { ITransactionRepository } from '../interface/ITransactionRepository'
 import { IValidatedBodyRequest } from '../interface/IValidatedBodyRequest'
 import { getLatestCurrencyQuotation } from '../utils/axios'
@@ -10,7 +10,9 @@ import { TransactionBuilder } from '../utils/TransactionBuilder'
 
 export class CreateTransactionService implements ICreateTransactionService {
 	constructor(private repository: ITransactionRepository) {}
-	async execute(body: IValidatedBodyRequest): Promise<IServiceResponse> {
+	async execute(
+		body: IValidatedBodyRequest
+	): Promise<ICreateTransactionServiceResponse> {
 		try {
 			const { fromCurrency, destinationCurrency } = body
 
@@ -36,8 +38,11 @@ export class CreateTransactionService implements ICreateTransactionService {
 				}
 			}
 		} catch (error) {
-			const errorResult = ErrorHandler.handle(error)
-			return errorResult
+			const { statusCode, body } = ErrorHandler.handle(error)
+			return {
+				statusCode,
+				body
+			}
 		}
 	}
 }

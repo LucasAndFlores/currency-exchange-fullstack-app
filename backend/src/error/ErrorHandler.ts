@@ -1,11 +1,11 @@
 import { EEStatusCode } from '../enum/EEStatusCode'
 import { EErrorMessage } from '../enum/EErrorMessage'
-import { IServiceResponse } from '../interface/IServiceResponse'
+import { IErrorHandlerResponse } from '../interface/IErrorHandlerResponse'
 import { AxiosCustomError } from './AxiosCustomError'
 import { DatabaseError } from './DatabaseError'
 
 export class ErrorHandler {
-	static handle(error: unknown): IServiceResponse {
+	static handle(error: unknown): IErrorHandlerResponse {
 		if (error instanceof AxiosCustomError) {
 			return {
 				statusCode: error.statusCode,
