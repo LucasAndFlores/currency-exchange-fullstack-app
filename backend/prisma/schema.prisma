@@ -1,0 +1,18 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+model transactions {
+  id        Int      @id @default(autoincrement())
+  fromCurrency  String @map("from_currency")
+  toCurrency String @map("to_currency")
+  totalAmountConverted Decimal   @db.Decimal(1000, 2) @map("total_amount_converted")
+  totalAmountConvertedInUSD Decimal  @db.Decimal(1000, 2) @map("total_amount_converted_in_usd")
+  createdAt DateTime @default(now()) @map("created_at")
+}
+
