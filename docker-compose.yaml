@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  currency-exchange-api:
+    build: 
+      context: ./backend/
+      dockerfile: Dockerfile
+    image: currency-exchange-api:latest
+    container_name: currency-exchange-api
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./backend/src/:/app/src
+    ports: 
+      - ${BACKEND_PORT}:${BACKEND_PORT}
