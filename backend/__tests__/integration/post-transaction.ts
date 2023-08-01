@@ -5,8 +5,21 @@ import { getLatestCurrencyQuotation } from '../../src/utils/axios'
 import { EEStatusCode } from '../../src/enum/EEStatusCode'
 import { TransactionRepository } from '../../src/repository/TransactionRepository'
 import { EErrorMessage } from '../../src/enum/EErrorMessage'
+import { PrismaClient } from '@prisma/client'
+
+let prismaClient: PrismaClient
 
 describe('integration test POST transaction', () => {
+	beforeEach(() => {
+		prismaClient = new PrismaClient()
+	})
+
+	afterEach(async () => {
+		await prismaClient.transactions.deleteMany({})
+		await prismaClient.$disconnect()
+		jest.clearAllMocks()
+	})
+
 	it('should be able to send a request and receive the result of operation', async () => {
 		const body = {
 			fromCurrency: 'EUR',
