@@ -3,7 +3,7 @@ import { EErrorMessage } from '../enum/EErrorMessage'
 import { EEStatusCode } from '../enum/EEStatusCode'
 import { AxiosCustomError } from '../error/AxiosCustomError'
 import { IGetLatestCurrencyQuotationErrorResponse } from '../interface/IGetLatestCurrencyQuotationErrorResponse'
-import { IGetLatestCurrencyQuotationStatus } from '../interface/IGetLatestCurrencyQuotationStatus'
+import { IExternalAPIResponseStatus } from '../interface/IExternalAPIResponseStatus'
 import { IGetLatestCurrencyQuotationSuccessResponse } from '../interface/IGetLatestCurrencyQuotationSuccessResponse'
 import { TGetLatestCurrencyQuotationParams } from '../interface/TGetLatestCurrencyQuotationParams'
 import { localConfig } from '../config'
@@ -20,7 +20,7 @@ export async function getLatestCurrencyQuotation({
 			`${EXTERNAL_API_URL}/latest?access_key=${EXTERNAL_API_TOKEN}&symbols=${USD},${fromCurrency},${destinationCurrency}`
 		)
 
-		const verifyStatus = response.data as IGetLatestCurrencyQuotationStatus
+		const verifyStatus = response.data as IExternalAPIResponseStatus
 
 		if (!verifyStatus.success) {
 			const errorFromAPI =

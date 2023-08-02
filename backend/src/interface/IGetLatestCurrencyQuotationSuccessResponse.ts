@@ -1,7 +1,7 @@
-import { IGetLatestCurrencyQuotationStatus } from './IGetLatestCurrencyQuotationStatus'
+import { IExternalAPIResponseStatus } from './IExternalAPIResponseStatus'
 
 export interface IGetLatestCurrencyQuotationSuccessResponse
-	extends IGetLatestCurrencyQuotationStatus {
+	extends IExternalAPIResponseStatus {
 	timestamp: string
 	base: string
 	date: string

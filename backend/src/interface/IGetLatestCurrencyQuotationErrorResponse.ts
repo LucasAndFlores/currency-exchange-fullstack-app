@@ -1,7 +1,7 @@
-import { IGetLatestCurrencyQuotationStatus } from './IGetLatestCurrencyQuotationStatus'
+import { IExternalAPIResponseStatus } from './IExternalAPIResponseStatus'
 
 export interface IGetLatestCurrencyQuotationErrorResponse
-	extends IGetLatestCurrencyQuotationStatus {
+	extends IExternalAPIResponseStatus {
 	error: {
 		code: number
 		type: string
