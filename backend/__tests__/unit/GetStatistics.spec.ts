@@ -140,4 +140,48 @@ describe('Get Statistics Unit Test', () => {
 		expect(spyGetStatisticsMethodTransactionRepository).toHaveBeenCalled()
 		expect(result).toStrictEqual(expected)
 	})
+
+	it('if an unexpected error happens inside service layer, it should be handle by errorHandler class', async () => {
+		jest.spyOn(StatisticsBuilder.prototype, 'build').mockImplementation(() => {
+			throw new Error('integration test error')
+		})
+
+		const mockedPrismaResponse: IGetStatisticsPrismaReponse = {
+			totalRequestsMade: { id: 6 },
+			mostPopularDestinationCurrency: [
+				{
+					_count: { id: 2 },
+					toCurrency: 'USD'
+				}
+			],
+			sumOfTotalAmountConvertedInUSD: {
+				_sum: { totalAmountConvertedInUSD: 26584.72 as unknown as Decimal }
+			}
+		}
+
+		prismaMock.transactions.count.mockResolvedValue(
+			mockedPrismaResponse.totalRequestsMade as unknown as number
+		)
+
+		prismaMock.transactions.groupBy // @ts-ignore // unit test
+			.mockResolvedValue(mockedPrismaResponse.mostPopularDestinationCurrency)
+
+		prismaMock.transactions.aggregate // @ts-ignore // unit test
+			.mockResolvedValue(mockedPrismaResponse.sumOfTotalAmountConvertedInUSD)
+
+		const spyGetStatisticsMethodTransactionRepository = jest.spyOn(
+			transactionRepository,
+			'getStatistics'
+		)
+
+		const result = await getStatisticsService.execute()
+
+		const expected = {
+			statusCode: EEStatusCode.INTERNAL_SERVER_ERROR,
+			body: { message: EErrorMessage.UNKNOWN_ERROR }
+		}
+
+		expect(spyGetStatisticsMethodTransactionRepository).toHaveBeenCalled()
+		expect(result).toStrictEqual(expected)
+	})
 })

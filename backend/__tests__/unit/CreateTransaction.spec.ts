@@ -10,6 +10,7 @@ import { TransactionRepository } from '../../src/repository/TransactionRepositor
 import { Decimal } from '@prisma/client/runtime/library'
 import { prismaMock } from '../mocks/prisma/singletonPrismaClient'
 import { errorResponse } from '../mocks/axios/errorResponse'
+import { TransactionBuilder } from '../../src/utils/TransactionBuilder'
 
 let createTransactionService: CreateTransactionService
 let transactionRepository: TransactionRepository
@@ -197,6 +198,39 @@ describe('CreateTransactionService Unit Test', () => {
 			statusCode: EEStatusCode.INTERNAL_SERVER_ERROR
 		}
 
+		expect(result).toStrictEqual(expectedResult)
+	})
+
+	it('if an unexpected error happens inside service layer, it should be handle by errorHandler class', async () => {
+		const body: IValidatedBodyRequest = {
+			fromCurrency: 'BRL',
+			amountToConvert: 10000,
+			destinationCurrency: 'CZK'
+		}
+
+		jest
+			.spyOn(TransactionBuilder.prototype, 'generateConversionToCurrencies')
+			.mockImplementation(() => {
+				throw new Error(' integration test')
+			})
+
+		jest
+			.spyOn(axios, 'get')
+			.mockResolvedValueOnce({ data: successfulResponse, status: 200 })
+
+		const spyInsertMethodTransactionRepository = jest.spyOn(
+			transactionRepository,
+			'insert'
+		)
+
+		const result = await createTransactionService.execute(body)
+
+		const expectedResult = {
+			body: { message: EErrorMessage.UNKNOWN_ERROR },
+			statusCode: EEStatusCode.INTERNAL_SERVER_ERROR
+		}
+
+		expect(spyInsertMethodTransactionRepository).not.toHaveBeenCalled()
 		expect(result).toStrictEqual(expectedResult)
 	})
 })

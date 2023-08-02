@@ -4,7 +4,6 @@ import { generateExpectedResult } from '../utils/generateExpectedResult'
 import { getLatestCurrencyQuotation } from '../../src/utils/axios'
 import { EEStatusCode } from '../../src/enum/EEStatusCode'
 import { TransactionRepository } from '../../src/repository/TransactionRepository'
-import { EErrorMessage } from '../../src/enum/EErrorMessage'
 import { PrismaClient } from '@prisma/client'
 
 let prismaClient: PrismaClient
@@ -52,24 +51,5 @@ describe('integration test POST transaction', () => {
 
 		expect(response.statusCode).toBe(EEStatusCode.BAD_REQUEST)
 		expect(response.body).toHaveProperty('issues')
-	})
-
-	it('if an unexpected error happens inside service layer, it should be handle by errorHandler class', async () => {
-		const body = {
-			fromCurrency: 'EUR',
-			amountToConvert: 100,
-			destinationCurrency: 'USD'
-		}
-
-		jest
-			.spyOn(TransactionRepository.prototype, 'insert')
-			.mockRejectedValueOnce(new Error(' integration test'))
-
-		const response = await supertest(app).post('/api/transaction').send(body)
-
-		expect(response.statusCode).toBe(EEStatusCode.INTERNAL_SERVER_ERROR)
-		expect(response.body).toStrictEqual({
-			message: EErrorMessage.UNKNOWN_ERROR
-		})
 	})
 })
