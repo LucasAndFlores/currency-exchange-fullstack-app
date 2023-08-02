@@ -2,7 +2,7 @@ import axios from 'axios'
 import { EErrorMessage } from '../enum/EErrorMessage'
 import { EEStatusCode } from '../enum/EEStatusCode'
 import { AxiosCustomError } from '../error/AxiosCustomError'
-import { IGetLatestCurrencyQuotationErrorResponse } from '../interface/IGetLatestCurrencyQuotationErrorResponse'
+import { IExternalAPIStandardErrorResponse } from '../interface/IExternalAPIStandardErrorResponse'
 import { IExternalAPIResponseStatus } from '../interface/IExternalAPIResponseStatus'
 import { IGetLatestCurrencyQuotationSuccessResponse } from '../interface/IGetLatestCurrencyQuotationSuccessResponse'
 import { TGetLatestCurrencyQuotationParams } from '../interface/TGetLatestCurrencyQuotationParams'
@@ -23,8 +23,7 @@ export async function getLatestCurrencyQuotation({
 		const verifyStatus = response.data as IExternalAPIResponseStatus
 
 		if (!verifyStatus.success) {
-			const errorFromAPI =
-				verifyStatus as IGetLatestCurrencyQuotationErrorResponse
+			const errorFromAPI = verifyStatus as IExternalAPIStandardErrorResponse
 			throw new Error('The external API returned an error', {
 				cause: errorFromAPI
 			})

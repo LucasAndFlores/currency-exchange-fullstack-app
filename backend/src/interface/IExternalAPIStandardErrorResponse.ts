@@ -1,6 +1,6 @@
 import { IExternalAPIResponseStatus } from './IExternalAPIResponseStatus'
 
-export interface IGetLatestCurrencyQuotationErrorResponse
+export interface IExternalAPIStandardErrorResponse
 	extends IExternalAPIResponseStatus {
 	error: {
 		code: number
