@@ -15,11 +15,11 @@ services:
     ports: 
       - ${BACKEND_PORT}:${BACKEND_PORT}
     depends_on:
-      - postgres-db
+      - postgres-db-dev
   
-  postgres-db:
+  postgres-db-dev:
     image: postgres:latest
-    container_name: postgres-db
+    container_name: postgres-db-dev
     env_file:
       - .env
     ports:
