@@ -3,8 +3,8 @@ import { app } from '../../src/app'
 import { generateExpectedResult } from '../utils/generateExpectedResult'
 import { getLatestCurrencyQuotation } from '../../src/utils/axios'
 import { EEStatusCode } from '../../src/enum/EEStatusCode'
-import { TransactionRepository } from '../../src/repository/TransactionRepository'
 import { PrismaClient } from '@prisma/client'
+import * as middlewares from '../../src/middleware/validateSchema'
 
 let prismaClient: PrismaClient
 
@@ -39,7 +39,7 @@ describe('integration test POST transaction', () => {
 		expect(response.body).toStrictEqual(expectedResult.body)
 	})
 
-	it('should not be able to send a request if the body does not contain a required field', async () => {
+	it('if the request body is missing one field, it should return a string with the error message', async () => {
 		const bodyMissingAmountToConvert = {
 			fromCurrency: 'EUR',
 			destinationCurrency: 'USD'
@@ -50,6 +50,23 @@ describe('integration test POST transaction', () => {
 			.send(bodyMissingAmountToConvert)
 
 		expect(response.statusCode).toBe(EEStatusCode.BAD_REQUEST)
-		expect(response.body).toHaveProperty('issues')
+		expect(response.body).toHaveProperty('message')
+		expect(response.body.message).toBe(
+			'amountToConvert is required and should be higher than 0'
+		)
+	})
+
+	it('if the request body is missing more than one field, it should return an array of strings with the error messages', async () => {
+		const bodyMissingAmountToConvert = {
+			fromCurrency: 'EUR'
+		}
+
+		const response = await supertest(app)
+			.post('/api/transaction')
+			.send(bodyMissingAmountToConvert)
+
+		expect(response.statusCode).toBe(EEStatusCode.BAD_REQUEST)
+		expect(response.body).toHaveProperty('message')
+		expect(Array.isArray(response.body.message)).toBe(true)
 	})
 })

@@ -15,7 +15,19 @@ export function validateSchema(schema: AnyZodObject) {
 			return next()
 		} catch (error) {
 			if (error instanceof ZodError) {
-				response.status(EEStatusCode.BAD_REQUEST).json(error)
+				if (error.issues.length > 1) {
+					const validationErrorMessages = error.issues.map(
+						(error) => error.message
+					)
+					response
+						.status(EEStatusCode.BAD_REQUEST)
+						.json({ message: validationErrorMessages })
+				} else {
+					const validationErrorMessage = error.issues[0].message
+					response
+						.status(EEStatusCode.BAD_REQUEST)
+						.json({ message: validationErrorMessage })
+				}
 			} else {
 				return response
 					.status(EEStatusCode.INTERNAL_SERVER_ERROR)
