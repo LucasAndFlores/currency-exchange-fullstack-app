@@ -14,20 +14,9 @@ export class TransactionRepository implements ITransactionRepository {
 	}
 
 	async insert(data: ITransaction): Promise<void> {
-		const {
-			fromCurrency,
-			totalAmountConverted,
-			totalAmountConvertedInUSD,
-			toCurrency
-		} = data
 		try {
 			await this.db.transactions.create({
-				data: {
-					fromCurrency,
-					totalAmountConverted,
-					totalAmountConvertedInUSD,
-					toCurrency
-				}
+				data
 			})
 		} catch (error) {
 			console.error('A Database error happened', error)
