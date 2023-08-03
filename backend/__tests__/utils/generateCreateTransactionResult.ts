@@ -3,7 +3,7 @@ import { IGetLatestCurrencyQuotationSuccessResponse } from '../../src/interface/
 import { IValidatedBodyRequest } from '../../src/interface/IValidatedBodyRequest'
 import { TransactionBuilder } from '../../src/utils/TransactionBuilder'
 
-export function generateExpectedResult(
+export function generateCreateTransactionResult(
 	axiosResponse: IGetLatestCurrencyQuotationSuccessResponse,
 	body: IValidatedBodyRequest,
 	statusCode: number

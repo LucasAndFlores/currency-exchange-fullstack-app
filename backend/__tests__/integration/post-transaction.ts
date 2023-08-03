@@ -1,10 +1,9 @@
 import supertest from 'supertest'
 import { app } from '../../src/app'
-import { generateExpectedResult } from '../utils/generateExpectedResult'
+import { generateCreateTransactionResult } from '../utils/generateCreateTransactionResult'
 import { getLatestCurrencyQuotation } from '../../src/utils/axios'
 import { EEStatusCode } from '../../src/enum/EEStatusCode'
 import { PrismaClient } from '@prisma/client'
-import * as middlewares from '../../src/middleware/validateSchema'
 
 let prismaClient: PrismaClient
 
@@ -33,7 +32,11 @@ describe('integration test POST transaction', () => {
 			destinationCurrency: body.destinationCurrency
 		})
 
-		const expectedResult = generateExpectedResult(fetchFromAPI, body, 200)
+		const expectedResult = generateCreateTransactionResult(
+			fetchFromAPI,
+			body,
+			200
+		)
 
 		expect(response.statusCode).toBe(EEStatusCode.OK)
 		expect(response.body).toStrictEqual(expectedResult.body)

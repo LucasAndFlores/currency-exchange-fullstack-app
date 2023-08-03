@@ -4,7 +4,7 @@ import { EErrorMessage } from '../../src/enum/EErrorMessage'
 import { EEStatusCode } from '../../src/enum/EEStatusCode'
 import { CreateTransactionService } from '../../src/service/CreateTransactionService'
 import { successfulResponse } from '../mocks/axios/getLatestCurrencyQuotation/successfulResponse'
-import { generateExpectedResult } from '../utils/generateExpectedResult'
+import { generateCreateTransactionResult } from '../utils/generateCreateTransactionResult'
 import { IValidatedBodyRequest } from '../../src/interface/IValidatedBodyRequest'
 import { TransactionRepository } from '../../src/repository/TransactionRepository'
 import { Decimal } from '@prisma/client/runtime/library'
@@ -57,7 +57,7 @@ describe('CreateTransactionService Unit Test', () => {
 
 		const result = await createTransactionService.execute(body)
 
-		const expected = generateExpectedResult(
+		const expected = generateCreateTransactionResult(
 			successfulResponse,
 			body,
 			EEStatusCode.OK
@@ -96,7 +96,7 @@ describe('CreateTransactionService Unit Test', () => {
 
 		const result = await createTransactionService.execute(body)
 
-		const expected = generateExpectedResult(
+		const expected = generateCreateTransactionResult(
 			successfulResponse,
 			body,
 			EEStatusCode.OK
