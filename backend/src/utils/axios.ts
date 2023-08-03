@@ -43,7 +43,7 @@ export async function getLatestCurrencyQuotation({
 export async function getAvailableCurrenciesFromAPI(): Promise<IGetAvailableCurrenciesFromAPISuccessResponse> {
 	try {
 		const response = await axios.get(
-			`${EXTERNAL_API_URL}/api/symbols?access_key=${EXTERNAL_API_TOKEN}`
+			`${EXTERNAL_API_URL}/symbols?access_key=${EXTERNAL_API_TOKEN}`
 		)
 
 		const verifyStatus = response.data as IExternalAPIResponseStatus
