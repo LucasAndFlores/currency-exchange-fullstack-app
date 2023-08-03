@@ -21,7 +21,7 @@ const transactionStoredOnDatabase: ITransaction[] = [
 
 let prismaClient: PrismaClient
 
-describe('integration test POST transaction', () => {
+describe('integration test GET statistics', () => {
 	beforeEach(async () => {
 		prismaClient = new PrismaClient()
 	})
