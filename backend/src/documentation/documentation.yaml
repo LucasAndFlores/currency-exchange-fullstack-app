@@ -1,0 +1,170 @@
+openapi: 3.0.3
+info:
+  title: Currency exchange API
+  description: |-
+    This API is designed to store currency transactions and generate statistics based on these transactions. It also offers access to a variety of currencies provided by [Fixer.io](https://fixer.io/). To ensure proper functionality, please ensure that all required environment variables are set correctly. Please note that all examples provided in this documentation assume the use of port `5000`. If you opt to use a different port, the examples may not function as intended.
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000/api
+tags:
+  - name: available endpoints
+paths:
+  /transaction:
+    post:
+      tags:
+        - available endpoints
+      summary: Adds a new transaction
+      description: This endpoint allows you to add a new currency transaction to the database.
+      operationId: addTransaction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fromCurrency:
+                  type: string
+                  example: EUR
+                amountToConvert:
+                  type: number
+                  example: 700.98
+                destinationCurrency:
+                  type: string
+                  example: CZK
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  destinationCurrency:
+                    type: string
+                    example: CZK
+                  convertedAmount:
+                    type: number
+                    example: 8000
+        '400':
+          description: Invalid parameters, please review the request fields. 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    format: string
+                    example: destinationCurrency is required and should be uppercase
+        '503':
+          description: Service unavailable. The external API or Axios failed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    format: string
+                    example: An error happened with the request
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    format: string
+                    example: An unexpected error happened
+  /statistics:
+    get:
+      tags:
+        - available endpoints
+      summary: Retrieve all transaction statistics.
+      description: This endpoint returns an object containing comprehensive statistics derived from the transactions.
+      operationId: statistics
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalRequestsMade:
+                    type: number
+                    example: 40
+                  sumOfTotalAmountConvertedInUSD:
+                    type: number
+                    example: 8000.05
+                  mostPopularDestinationCurrency:
+                    type: object
+                    properties:
+                      total:
+                        type: number
+                        example: 5
+                      currency:
+                        type: string
+                        example: CZK
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    format: string
+                    example: An unexpected error happened
+  /available-currencies:
+    get:
+      tags:
+        - available endpoints
+      summary: Retrieve a list of all available currencies
+      description: This endpoint returns a list of all currencies that are provided by Fixer.io.
+      operationId: available-currencies
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  currencies:
+                    type: array
+                    items:
+                       type: object
+                       properties:
+                        name:
+                          type: string
+                          example: United Arab Emirates Dirham
+                        prefix:
+                          type: string
+                          example: AED
+        '503':
+          description: Service unavailable. The external API or axios failed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    format: string
+                    example: An error happened with the request
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    format: string
+                    example: An unexpected error happened
