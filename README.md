@@ -63,7 +63,7 @@ yarn unit-tests
 ```
 
 #### Integration Tests
-If you previously ran the command `docker-compose up -d postgres-db-dev`, now execute `docker-compose stop postgres-db-dev` to halt the container.
+If you previously ran the command `docker-compose up -d postgres-db-dev`, now execute `docker stop postgres-db-dev` to halt the container.
 
 Copy your environment variables `EXTERNAL_API_TOKEN` and `EXTERNAL_API_URL` into the `.env.test` file.
 
