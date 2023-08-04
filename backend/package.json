@@ -18,12 +18,10 @@
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
     "unit-tests": "jest ./__tests__/unit",
-    "statistics-test": "jest ./__tests__/integration/get-statistics.ts",
     "start": "node ./dist/src/index.js",
     "dev": "nodemon ./src/index.ts",
     "prisma:prepare": "npx prisma migrate dev && npx prisma generate client",
     "prisma:prepare:integration-tests": "dotenv -e .env.sample -- npx prisma migrate dev && npx prisma generate client",
-    "E2E:prepare-env": "npx prisma generate client && npx ts-node ./__tests__/utils/runBeforeEndToEndTests.ts",
     "test": "jest --runInBand",
     "prettier:check": "prettier --check src/ __tests__/",
     "prettier:auto-format": "prettier --check src/ __tests__/",
