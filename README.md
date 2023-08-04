@@ -63,7 +63,11 @@ yarn unit-tests
 ```
 
 #### Integration Tests
-First, run a separate Docker container containing the PostgreSQL image. This step prevents any interference with the development database. Use the following command:
+If you previously ran the command `docker-compose up -d postgres-db-dev`, now execute `docker-compose stop postgres-db-dev` to halt the container.
+
+Copy your environment variables `EXTERNAL_API_TOKEN` and `EXTERNAL_API_URL` into the `.env.test` file.
+
+Run a separate Docker container containing the PostgreSQL image. This step prevents any interference with the development database. Use the following command:
 
 ```bash
 docker run --name postgres_db --network host --env-file ./.env.test -d postgres
@@ -72,7 +76,7 @@ docker run --name postgres_db --network host --env-file ./.env.test -d postgres
 With the PostgreSQL container up and running, you're now ready to prepare Prisma for testing. Execute the following command:
 
 ```bash
-yarn prisma:prepare
+yarn prisma:prepare:integration-tests
 ```
 
 A Prisma prompt will appear:
